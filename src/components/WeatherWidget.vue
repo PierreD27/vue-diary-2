@@ -1,24 +1,38 @@
 <script setup lang="ts">
 import DailyUpdate from './days/DailyUpdate.vue';
-//import WeatherGetApi from '@/services/WeatherGetApi.js'
-import axios from 'axios'
+//import {getCurrentDayData} from '@/services/WeatherGetApi.js'
+import {getDaysData} from '@/services/WeatherGetApi.js'
 import HourlyUpdate from './days/HourlyUpdate.vue';
 import CurrentDayTemperature from './days/CurrentDayTemperature.vue';
 import CurrentDayDiary from './days/CurrentDayDiary.vue';
 import { ref, onMounted } from 'vue';
 
-const currentWeather= ref()
+const currentWeather = ref(null)
+const daysData = ref(null)
+const loading=ref(false)
 
-onMounted(()=>{
-  axios.get('http://api.weatherapi.com/v1/current.json?key=2cacdf679ade4b979d471305241302&q=Bishkek')
-    .then((response)=> {
-      currentWeather.value=response.data
-      console.log(currentWeather.value)
-    })
-    .catch((error)=>{
-      console.log(error)
-    })
+// onMounted(()=>{
+//   console.log('1')
+//   WeatherGetApi.getCurentDayData()  
+//     .then((response)=> {
+//       currentWeather.value=response.data
+//       console.log(currentWeather.value)
+//       console.log('3')
+//     })
+//     .catch((error)=>{
+//       console.log(error)
+//     })
+//     console.log('2')
+// })
 
+onMounted(async()=>{
+
+  loading.value=true;
+ // currentWeather.value=await getCurrentDayData()
+  daysData.value=await getDaysData()
+  //console.log(currentWeather)
+  console.log(daysData)
+  loading.value=false
 })
 
 const hourly = ref([
@@ -109,15 +123,24 @@ const toDoList = ref([
 </script>
 
 <template>
-  <div class="container weather-widget-wrapper">
+  <div v-if="loading">LOADING ....</div>
+  <div v-if=" daysData && !loading " class="container weather-widget-wrapper">
     <div class="hero-section">
         <div class="current-day-wrapper">
         
-        <CurrentDayTemperature/>
-      
+        <CurrentDayTemperature :temperature="daysData.current.temp_c" 
+          :humidity="daysData.current.humidity" 
+          :condition="daysData.current.condition.text"
+          :location="daysData.location.name"
+          :wind_kph="daysData.current.wind_kph"
+          :pressure_mb="daysData.current.pressure_mb"
+          :chance_of_rain="daysData.forecast.forecastday[0].day.daily_chance_of_rain"
+          :chance_of_snow="daysData.forecast.forecastday[0].day.daily_chance_of_snow"
+          />
+
 
         <div class='current-day-diary-wrapper'>
-            <h3 class="title">Список дел на сегодня</h3>
+            <h3 class="title">Today's to do list</h3>
             <template v-for="todo in toDoList" :key="todo.time">
             <CurrentDayDiary :time="todo.time" :activity="todo.activity" />
             </template>
