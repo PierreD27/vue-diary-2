@@ -9,6 +9,7 @@ interface Props {
   pressure_mb:number,
   chance_of_rain:number,
   chance_of_snow:number,
+  icon_path:string,
  
 }
 
@@ -22,11 +23,11 @@ defineProps<Props>()
     <div class="current-day-temperature-wrapper">
       <div class="img-wrapper">
         <p>Today's weather in {{ location }} </p>
-        <img src="@/assets/images/icons/moon.svg" />
+        <img :src="icon_path" />
       </div>
 
       <div class="current-day-temperature-info">
-        <h2>{{ Math.ceil(temperature) }}°C</h2>
+        <h2>{{ Math.round(temperature) }}°C</h2>
         <p>{{ condition }}</p>
       </div> 
     </div>
@@ -85,27 +86,36 @@ defineProps<Props>()
   }
   .current-day-temperature-additional-info{
       display: flex;
+      justify-content: center;
+      
         ul {
         padding: 0;
         list-style-type: none;
         display: flex;
-        flex: 1;
+
         
-        align-items: center;
+        
         
       } 
 
       li {
         display: inline;
         text-align: center;
+        align-items: center;
         flex: 1;
         height: 3rem;
-        border: 1px solid white;
+        background-color: rgb(146, 142, 142);
+        padding: 0.7rem 0.2rem;
+        font-size: smaller;
         
+        span{
+          text-align: center;
+        }
         img{
           float: left;
           height: 100%;
         }
+        
       }
       
     }

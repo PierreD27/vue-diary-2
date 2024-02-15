@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 interface Props {
-  day: string,
-  min: string,
-  max: string,
+  date: string,
+  condition: string,
+  icon_path: string,
+  maxtemp_c:number,
+  maxtemp_f:number,
+  mintemp_c:number,
+  mintemp_f:number,
 }
 
 
@@ -11,9 +15,11 @@ defineProps<Props>()
 
 <template>
   <div class="daily-item">
-    <p>day: {{ day }}</p>
-    <p>min: {{ min }}</p>
-    <p>max: {{ max }}</p>
+    <p>{{ date }}</p>
+    <img :src="icon_path"/>
+    <p> {{ Math.round(maxtemp_c) }}°C</p>
+    <p> {{ Math.round(mintemp_c) }}°C</p>
+    
   </div>
 </template>
 
@@ -26,5 +32,6 @@ defineProps<Props>()
   p {
     color: white;
   }
+  
 }
 </style>

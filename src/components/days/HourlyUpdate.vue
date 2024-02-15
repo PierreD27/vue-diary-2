@@ -1,7 +1,11 @@
 <script lang="ts" setup>
 interface Props {
-  temperature: string,
-  hour: string
+  hour:string,
+  condition:string,
+  icon_path: string,
+  temp_c:number,
+  temp_f:number,
+  is_day:number,
 }
 
 defineProps<Props>()
@@ -9,8 +13,10 @@ defineProps<Props>()
 
 <template>
   <div class="hour-wrapper">
-    <p>temp: {{ temperature }}</p>
-    <p>h: {{ hour }}</p>
+    <p> {{ hour }}</p>
+    <img :src="icon_path">
+    <p> {{Math.round(temp_c) }}°C</p>
+    
   </div>
 </template>
 
