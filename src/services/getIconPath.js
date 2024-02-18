@@ -3,7 +3,7 @@ export function getWeatherIconPath(condition){
       case 'Sunny':
         return '/clear.svg';
   
-      case 'Partly Cloudy':
+      case 'Partly Cloudy ':
         return '/partly-cloudy.svg';
   
       case 'Cloudy':
