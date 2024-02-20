@@ -1,5 +1,8 @@
 @import './colors.scss';
-
+html{
+  background: rgb(2,0,36);
+  background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(38,80,119,1) 61%, rgba(0,212,255,1) 100%);
+}
 
 body, a, p, h1, h2, h3, h4, h5, div, span, ul, li {
   margin: 0;

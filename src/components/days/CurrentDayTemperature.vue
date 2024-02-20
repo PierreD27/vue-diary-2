@@ -1,11 +1,14 @@
 <script lang="ts" setup>
 
 interface Props {
-  temperature: number,
+  temp_c: number,
+  temp_f:number,
+  isCel:boolean,
   humidity: number,
   condition:string,
   location:string,
   wind_kph: number,
+  wind_mph:number,
   pressure_mb:number,
   chance_of_rain:number,
   chance_of_snow:number,
@@ -27,27 +30,30 @@ defineProps<Props>()
       </div>
 
       <div class="current-day-temperature-info">
-        <h2>{{ Math.round(temperature) }}°C</h2>
+        <h2 v-if="isCel">{{ Math.round(temp_c) }}°C</h2>
+        <h2 v-else>{{ Math.round(temp_f) }}°F</h2>
         <p>{{ condition }}</p>
       </div> 
     </div>
     <div class="current-day-temperature-additional-info">
         <ul>
-          <li>
-            <img src="@/assets/images/icons/wind.svg"> {{wind_kph}} km/h
-            </li>
-            <li>
-              <img src="@/assets/images/icons/humidity.svg"> {{humidity}}%
-            </li>
-            <li>
-              <img src="@/assets/images/icons/rain-probability.svg"> 
-              <span v-if="chance_of_rain===0 && chance_of_snow===0">{{chance_of_rain}}%</span>
-              <span v-else-if="chance_of_rain > chance_of_snow">{{chance_of_rain}}%</span>
-              <span v-else>{{chance_of_snow}}%</span>
-            </li>
-            <li>
+          <li class="additional-info-item">
+            <img src="@/assets/images/icons/wind.svg">
+            <span v-if="isCel"> {{wind_kph}}  km/h</span>
+            <span v-else> {{wind_mph}}  MPH </span>
+          </li>
+          <li class="additional-info-item">
+              <img src="@/assets/images/icons/humidity.svg"> <span> {{humidity}}% </span>
+          </li>
+          <li class="additional-info-item">
+            <img src="@/assets/images/icons/rain-probability.svg"> 
+            <span v-if="chance_of_rain===0 && chance_of_snow===0">{{chance_of_rain}}%</span>
+            <span v-else-if="chance_of_rain > chance_of_snow">{{chance_of_rain}}%</span>
+            <span v-else>{{chance_of_snow}}%</span>
+          </li>
+            <li class="additional-info-item">
               <img src="@/assets/images/icons/air-pressure.svg"> {{ Math.ceil(pressure_mb/1.333) }} mmHg
-            </li>
+          </li>
         </ul>
       </div>
   </div>  
@@ -87,6 +93,7 @@ defineProps<Props>()
   .current-day-temperature-additional-info{
       display: flex;
       justify-content: center;
+      align-items: center;
       
         ul {
         padding: 0;
@@ -97,6 +104,10 @@ defineProps<Props>()
         
         
       } 
+      .additional-info-item{
+        display: flex;
+        align-items: center;
+      }
 
       li {
         display: inline;

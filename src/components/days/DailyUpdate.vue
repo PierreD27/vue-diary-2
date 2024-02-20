@@ -7,6 +7,7 @@ interface Props {
   maxtemp_f:number,
   mintemp_c:number,
   mintemp_f:number,
+  isCel:boolean,
 }
 
 
@@ -16,10 +17,15 @@ defineProps<Props>()
 <template>
   <div class="daily-item">
     <p>{{ date }}</p>
-    <img :src="icon_path"/>
-    <p> {{ Math.round(maxtemp_c) }}°C</p>
-    <p> {{ Math.round(mintemp_c) }}°C</p>
-    
+    <div class="icon-temp-wrapper"> 
+      <img :src="icon_path"/>
+      <div class="temp-wrapper">
+        <p v-if="isCel"> {{ Math.round(maxtemp_c) }}°C</p>
+        <p v-else> {{ Math.round(maxtemp_f) }}°F</p>
+        <p v-if="isCel"> {{ Math.round(mintemp_c) }}°C</p>
+        <p v-else> {{ Math.round(mintemp_f) }}°F</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -32,6 +38,19 @@ defineProps<Props>()
   p {
     color: white;
   }
-  
+  .icon-temp-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    img{
+      height: 3rem;
+    }
+
+    .temp-wrapper{
+      display: flex;
+      flex-direction: column;
+    }
+  }
 }
 </style>

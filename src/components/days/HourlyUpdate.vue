@@ -6,6 +6,7 @@ interface Props {
   temp_c:number,
   temp_f:number,
   is_day:number,
+  isCel:boolean,
 }
 
 defineProps<Props>()
@@ -15,7 +16,8 @@ defineProps<Props>()
   <div class="hour-wrapper">
     <p> {{ hour }}</p>
     <img :src="icon_path">
-    <p> {{Math.round(temp_c) }}°C</p>
+    <p v-if="isCel"> {{Math.round(temp_c) }}°C</p>
+    <p v-else> {{Math.round(temp_f) }}°F</p>
     
   </div>
 </template>

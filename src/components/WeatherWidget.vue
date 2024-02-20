@@ -4,10 +4,17 @@ import {getDaysData} from '@/services/WeatherGetApi.js'
 import {getWeatherIconPath} from '@/services/getIconPath.js'
 import HourlyUpdate from './days/HourlyUpdate.vue';
 import CurrentDayTemperature from './days/CurrentDayTemperature.vue';
+import CurrentDayGraph from './days/CurrentDayGraph.vue';
 import CurrentDayDiary from './days/CurrentDayDiary.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+
+interface Props{
+  isCel:boolean,
+  cityName:string
+}
 
 
+const props = defineProps<Props>()
 
 const daysData = ref<any>(null)
 const loading=ref(false)
@@ -22,6 +29,19 @@ onMounted(async()=>{
   getHoursData()
   getWeekData()
   getCurrentDataIcon()
+  loading.value=false
+})
+
+//props.cityName
+watch(()=> props.cityName, async ()=>{
+  loading.value=true
+  daysData.value=await getDaysData(props.cityName)
+  weatherByHour.value=[];
+  weatherByWeek.value=[];
+  currentDayIconPath='';
+  getHoursData()
+  getWeekData()
+  getCurrentDataIcon()
   console.log(daysData)
   console.log(weatherByHour)
   console.log(weatherByWeek)
@@ -29,9 +49,9 @@ onMounted(async()=>{
 })
 
 
-
 function getHoursData(){
   if (daysData.value){
+    
     const now =new Date();
     const nowHour:number= now.getHours();
     for (let i=nowHour+1; i<daysData.value.forecast.forecastday[0].hour.length; i++){
@@ -87,6 +107,7 @@ function getHoursData(){
    }
   }
 }
+
 
 function getWeekData(){
   if (daysData.value){
@@ -163,28 +184,34 @@ const toDoList = ref([
   <div v-if="loading">LOADING ....</div>
   <div v-if=" daysData && !loading " class="container weather-widget-wrapper">
     <div class="hero-section">
-        <div class="current-day-wrapper">
-        
-        <CurrentDayTemperature :temperature="daysData.current.temp_c" 
+      <div class="current-day-wrapper">
+   
+        <CurrentDayTemperature :temp_c="daysData.current.temp_c" 
+          :temp_f="daysData.current.temp_f" 
           :humidity="daysData.current.humidity" 
           :condition="daysData.current.condition.text"
           :location="daysData.location.name"
           :wind_kph="daysData.current.wind_kph"
+          :wind_mph="daysData.current.wind_mph"
           :pressure_mb="daysData.current.pressure_mb"
           :chance_of_rain="daysData.forecast.forecastday[0].day.daily_chance_of_rain"
           :chance_of_snow="daysData.forecast.forecastday[0].day.daily_chance_of_snow"
           :icon_path="currentDayIconPath"
+          :isCel="isCel"
           />
 
+          
 
-        <div class='current-day-diary-wrapper'>
-            <h3 class="title">Today's to do list</h3>
-            <template v-for="todo in toDoList" :key="todo.time">
-            <CurrentDayDiary :time="todo.time" :activity="todo.activity" />
-            </template>
+        <div class="current-day-graph-wrapper">
+
+         <CurrentDayGraph
+          :weatherByHour="weatherByHour"
+          :isCel="isCel"
+         />
 
         </div>
-      
+
+        
 
       
       </div>
@@ -200,12 +227,20 @@ const toDoList = ref([
              :temp_c="hour.hourTemp_c"
              :temp_f="hour.hourTemp_f"
              :is_day="hour.isDay"  
+             :isCel="isCel"
              />
           </template> 
         </div>
       </div>
-    </div>
+      <div class='current-day-diary-wrapper'>
+       <h3 class="title">Today's to do list</h3>
+        <template v-for="todo in toDoList" :key="todo.time">
+          <CurrentDayDiary :time="todo.time" :activity="todo.activity" />
+        </template>
 
+    </div>
+    </div>
+    
     <div class="daily-wrapper">
       <template v-for="day in weatherByWeek" :key="day.date">
         <DailyUpdate :date="day.date"
@@ -215,10 +250,11 @@ const toDoList = ref([
         :maxtemp_f="day.maxtemp_f"
         :mintemp_c="day.mintemp_c"
         :mintemp_f="day.mintemp_f"
+        :isCel="isCel"
         />
       </template>
     </div>
-
+    
   </div>
 </template>
 
@@ -237,10 +273,15 @@ const toDoList = ref([
       display: flex;
       gap: 2 rem;
       margin-bottom: 2rem;
+      justify-content: space-between;
       @media screen and (max-width: 720px) {
         flex-direction: column;
       }
       
+    }
+    .current-day-graph-wrapper{
+      width: 40%;
+      max-height: 100%;
     }
     .hourly-wrapper {
       padding: 1rem 0.5rem;

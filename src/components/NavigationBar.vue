@@ -1,5 +1,33 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 
+const isCel=ref<boolean>(true)
+const cityName=ref<string>('')
+
+const emit=defineEmits([
+  
+  'toggleWeatherUnit',
+  'cityChanged'
+])
+
+function onInputChange(){
+  isCel.value=!isCel.value
+  emit('toggleWeatherUnit', isCel.value)
+  
+}
+let timerId:null|number = null
+function onCityChange(value:string){
+  cityName.value=value;
+  if (timerId){
+    clearTimeout(timerId)
+  }
+  timerId = setTimeout( ()=>{
+    emit('cityChanged', cityName.value)
+  }, 1000)
+ 
+}
+
+ 
 
 </script>
 
@@ -8,19 +36,19 @@
     <div class="logo"><h1>SNS Weather Channel</h1></div>
     <div class="nav-buttons">
       <div class="change-location-wrapper">
-        <input type="text">
-        <button class="change-location-button">Другой город</button>
+        <input :value="cityName" @input="(e)=> onCityChange((e.target as HTMLInputElement).value) " type="text">
+        
       </div>
       <div class="cel-fahr-radio">
         <div class="middle">
           <label>
-            <input type="radio" name="radio" checked />
+            <input @change="onInputChange()" type="radio" name="radio" checked />
               <div class="box">
                 <span>°C</span>
               </div>
           </label>
           <label>
-              <input type="radio" name="radio" />
+              <input @change="onInputChange()" type="radio" name="radio" />
               <div class="box">
                 <span>°F</span>
               </div>
@@ -38,6 +66,7 @@
   padding: 0 1rem;
   background-color: red;
   display: flex;
+  justify-content: space-between;
 
 
   h1{
