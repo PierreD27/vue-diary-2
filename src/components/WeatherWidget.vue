@@ -110,10 +110,23 @@ function getHoursData(){
 
 
 function getWeekData(){
+  function getWeekDay(date:Date) {
+        let days:string[] = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+
+        return days[date.getDay()];
+      }
   if (daysData.value){
     for (let i=1; i<daysData.value.forecast.forecastday.length; i++){
       const singleDayDate:string=daysData.value.forecast.forecastday[i].date;
-      const singleDayDateNormalized:string=singleDayDate.slice(-2)+"."+singleDayDate.slice(-5,-3)+"."+singleDayDate.slice(0,4);
+      
+      const dateYear:number=+singleDayDate.slice(0,4);
+      const dateMonth:number=+singleDayDate.slice(-5,-3)-1;
+      const dateDate:number=+singleDayDate.slice(-2);
+      const tempDate:Date= new Date(dateYear, dateMonth, dateDate)
+
+      const weekDay:string=getWeekDay(tempDate);
+
+      //const singleDayDateNormalized:string=weekDay+" "+dateDate;
       const singleDayCondition:string=daysData.value.forecast.forecastday[i].day.condition.text;
       const iconPath:string=getWeatherIconPath(singleDayCondition)
       const fullIconPath:string='/src/assets/images/icons/weather-icons/day' +iconPath;
@@ -122,7 +135,8 @@ function getWeekData(){
       const singleDayMinTempC:number=daysData.value.forecast.forecastday[i].day.mintemp_c;
       const singleDayMinTempF:number=daysData.value.forecast.forecastday[i].day.mintemp_f;
       const pushedObject:any={
-        date:singleDayDateNormalized,
+        date:dateDate,
+        weekDay:weekDay,
         condition: singleDayCondition,
         icon_path: fullIconPath,
         maxtemp_c: singleDayMaxTempC,
@@ -185,22 +199,27 @@ const toDoList = ref([
   <div v-if=" daysData && !loading " class="container weather-widget-wrapper">
     <div class="hero-section">
       <div class="current-day-wrapper">
+
+        <div class="current-day-temperature-wrapper">
    
-        <CurrentDayTemperature :temp_c="daysData.current.temp_c" 
-          :temp_f="daysData.current.temp_f" 
-          :humidity="daysData.current.humidity" 
-          :condition="daysData.current.condition.text"
-          :location="daysData.location.name"
-          :wind_kph="daysData.current.wind_kph"
-          :wind_mph="daysData.current.wind_mph"
-          :pressure_mb="daysData.current.pressure_mb"
-          :chance_of_rain="daysData.forecast.forecastday[0].day.daily_chance_of_rain"
-          :chance_of_snow="daysData.forecast.forecastday[0].day.daily_chance_of_snow"
-          :icon_path="currentDayIconPath"
-          :isCel="isCel"
+          <CurrentDayTemperature :temp_c="daysData.current.temp_c" 
+            :temp_f="daysData.current.temp_f" 
+            :humidity="daysData.current.humidity" 
+            :condition="daysData.current.condition.text"
+            :location="daysData.location.name"
+            :country="daysData.location.country"
+            :wind_kph="daysData.current.wind_kph"
+            :wind_mph="daysData.current.wind_mph"
+            :pressure_mb="daysData.current.pressure_mb"
+            :chance_of_rain="daysData.forecast.forecastday[0].day.daily_chance_of_rain"
+            :chance_of_snow="daysData.forecast.forecastday[0].day.daily_chance_of_snow"
+            :icon_path="currentDayIconPath"
+            :sunrise="daysData.forecast.forecastday[0].astro.sunrise"
+            :sunset="daysData.forecast.forecastday[0].astro.sunset"
+            :isCel="isCel"
           />
 
-          
+        </div>  
 
         <div class="current-day-graph-wrapper">
 
@@ -217,7 +236,7 @@ const toDoList = ref([
       </div>
 
       <div class="hourly-wrapper">
-        <h3 class="title">24 hour weather</h3>
+        <h2 class>24 Hour Weather</h2>
 
         <div class="hourly-items">
            <template v-for="hour in weatherByHour" :key="hour.hour">
@@ -232,18 +251,20 @@ const toDoList = ref([
           </template> 
         </div>
       </div>
-      <div class='current-day-diary-wrapper'>
+      <!-- <div class='current-day-diary-wrapper'>
        <h3 class="title">Today's to do list</h3>
         <template v-for="todo in toDoList" :key="todo.time">
           <CurrentDayDiary :time="todo.time" :activity="todo.activity" />
         </template>
 
-    </div>
+      </div> -->
     </div>
     
     <div class="daily-wrapper">
+        <h2>7 Days Weather</h2>
       <template v-for="day in weatherByWeek" :key="day.date">
         <DailyUpdate :date="day.date"
+        :weekDay="day.weekDay"
         :condition="day.condition"
         :icon_path="day.icon_path"
         :maxtemp_c="day.maxtemp_c"
@@ -262,42 +283,80 @@ const toDoList = ref([
 .weather-widget-wrapper {
   margin: 0 auto;
   display: flex;
-  gap: 2rem;
-  padding: 2rem 1rem;
-  background-color: black;
+  gap: 1rem;
+  padding: 1.5rem 1rem;
+  background-color: #494b68;
+  border-radius: 0.5rem;
 
   .hero-section {
     flex: 1;
-    max-width: 80%;
+    max-width: 82%;
     .current-day-wrapper{
       display: flex;
-      gap: 2 rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
       justify-content: space-between;
+      
       @media screen and (max-width: 720px) {
         flex-direction: column;
+        
       }
       
     }
+
+   
     .current-day-graph-wrapper{
-      width: 40%;
+      width: 51%;
       max-height: 100%;
     }
     .hourly-wrapper {
-      padding: 1rem 0.5rem;
-      background-color: aqua;
-      border-radius: 0.8rem;
+      background-color: #022140;
+      border-radius: 0.5rem;
+      padding-bottom: 1rem;
 
-      .title {
+      /* width */
+      ::-webkit-scrollbar {
+        width: 1rem;
+      }
+
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: #1e4258; 
+        border-radius: 0.5rem;
+        margin: 0 1rem;
+      }
+      
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: #2d5f5d; 
+        width: 1rem;
+        border-radius: 0.5rem;
+      }
+
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+        background: #494b68; 
+      }
+
+      h2{
+        padding-top: 1rem;
         padding-bottom: 0.5rem;
+        margin-bottom: 0.5rem;
+        padding-left: 1rem;
+        background-color: #1e4258;
+        border-radius: 0.5rem 0.5rem  0 0 ;
       }
 
       .hourly-items {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-bottom: 0.5rem;
         display: flex;
-        gap: 2rem;
+        gap: 1rem;
         overflow-x:scroll;
-      }
-      
+        
+       }
+
+       
     }
   }
 
@@ -313,11 +372,22 @@ const toDoList = ref([
   .daily-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    overflow-y: auto;
-    width: 15%;
+    gap: 0.85rem;
+    background-color: #022140;
+    border-radius: 0.5rem;
+    padding-bottom: 0.5rem;
+    width: 17%;
     @media screen and (max-width: 720px) {
       width: 100%;
+    }
+
+    h2{
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
+    padding-left: 1rem;
+    background-color: #1e4258;
+    border-radius: 0.5rem 0.5rem  0 0 ;
     }
     // flex: 1;
   }

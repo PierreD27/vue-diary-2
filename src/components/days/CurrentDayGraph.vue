@@ -23,14 +23,37 @@ import { Line } from 'vue-chartjs';
 const labels:string[]=[];
 const dataCel:number[]=[];
 const dataFahr:number[]=[];
+let maxtemp_c:number
+let maxtemp_f:number
+let mintemp_c:number
+let mintemp_f:number
 
 function getChartData(){
+    maxtemp_c=Math.round(props.weatherByHour[0].hourTemp_c);
+    mintemp_c=Math.round(props.weatherByHour[0].hourTemp_c);
+    maxtemp_f=Math.round(props.weatherByHour[0].hourTemp_f);
+    maxtemp_f=Math.round(props.weatherByHour[0].hourTemp_f);
     for (let i=0; i<props.weatherByHour.length; i++){
         labels[i]=props.weatherByHour[i].hour;
         dataCel[i]=Math.round(props.weatherByHour[i].hourTemp_c);
         dataFahr[i]=Math.round(props.weatherByHour[i].hourTemp_f);
-    }
 
+        if (maxtemp_c<dataCel[i]){
+            maxtemp_c=dataCel[i];
+            maxtemp_f=dataFahr[i];
+        }
+        else if (mintemp_c>dataCel[i]){
+            mintemp_c=dataCel[i];
+            mintemp_f=dataFahr[i];
+        }
+        else{
+            continue;
+        }
+    }
+    maxtemp_c+=2;
+    maxtemp_f+=2;
+    mintemp_c-=2;
+    mintemp_f-=2;
 }
 getChartData()
 
@@ -65,33 +88,69 @@ const chartDataFahr = {
         }
     ]
 };
-const options = {
+const optionsCel = {
   responsive: true,
-  maintainAspectRatio: false
+  maintainAspectRatio: false,
+  scales: {
+      y: {
+        min: mintemp_c,
+        max: maxtemp_c,
+        
+      }
+  }  
+}
+const optionsFahr = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+      y: {
+        min: mintemp_f,
+        max: maxtemp_f,
+        
+      }
+  }  
 }
 
 </script>
 
 <template>
-
-    <div class="canvas-wrapper">
-        <p>My Chart</p>
-        <Line v-if="isCel" :data="chartDataCel" :options="options"/>
-        <Line v-else :data="chartDataFahr" :options="options"/>
-    </div>
-
+    <div class="canvas-container">
+        <h2>Curent Day Weather Chart</h2>
+        <div class="canvas-wrapper">
+           
+            <Line v-if="isCel" :data="chartDataCel" :options="optionsCel"/>
+            <Line v-else :data="chartDataFahr" :options="optionsFahr"/>
+        </div>
+    </div>  
 </template>
 
 <style lang="scss">
-    .canvas-wrapper{
+    .canvas-container{
         display: flex;
         flex-direction: column;
-        height: 19rem;
+        height: 100%;
+        background-color: #022140;
+        border-radius: 0.5rem;
+
+        h2{
+            padding-top: 1rem;
+            padding-bottom: 0.5rem;
+            padding-left: 1rem;
+            background-color: #1e4258;
+            border-radius: 0.5rem 0.5rem  0 0 ;
+            margin-bottom: 0.5rem;
+        }
+    .canvas-wrapper{
+        padding: 0 1rem;
+        height: 17.5rem;
+        
+        
      
 
 
     }
- 
+
+}
     
 
 

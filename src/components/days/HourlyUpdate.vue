@@ -24,8 +24,23 @@ defineProps<Props>()
 
 <style lang="scss">
 .hour-wrapper {
-  background: rgb(14, 168, 168);
-  padding: 0.5rem 0.7rem;
-  border-radius: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #1e4258;
+  padding: 0.3rem 0.7rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+  border-radius: 0.5rem;
+
+  img{
+    width: 90%;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+  }
+  p{
+    text-align: center;
+  }
+
 }
 </style>
