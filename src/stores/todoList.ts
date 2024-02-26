@@ -5,28 +5,43 @@ type todoItem={
     id:number
     item:string,
     time:string,
+    condition:string,
+    icon_path:string,
+    temp_c:number,
+    temp_f:number,
     completed:boolean,
     editing: boolean,
 }
 
-type State={
+
+type todoState={
     todoList: todoItem[]
     id:number
 }
+
+type todayWeatherDataItem={
+    hour:string,
+    condition:string,
+    icon_path:string,
+    hourTemp_c:number,
+    hourTemp_f:number,
+
+}
+type todayWeatherDataState={
+    todayWeatherData: todayWeatherDataItem[]
+}
+
+
 export const useTodoListStore = defineStore ('todoList', {
-    //state
-    state: (): State => ({
+    
+    state: (): todoState => ({
         todoList:[],
         id:0
     }),
-    //getters
-
-
-    //actions
-
+    
     actions:{
-        addTodo(item:string, time:string) {
-            this.todoList.push( { id: this.id++, item , time, completed: false, editing:false});
+        addTodo(item:string, time:string, condition: string, icon_path:string, temp_c:number, temp_f:number ) {
+            this.todoList.push( { id: this.id++, item , time, condition, icon_path, temp_c, temp_f , completed: false, editing:false});
         },
 
         editTodo(idToFind:number){
@@ -50,6 +65,25 @@ export const useTodoListStore = defineStore ('todoList', {
         },
 
 
+    }
+})
+
+export const useTodayWeatherDataStore =defineStore('todayWeatherData',{
+
+    state: ():todayWeatherDataState => ({
+        todayWeatherData:[],
+    }),
+
+    actions:{
+        addTodayWeatherData(todayWeatherData:any[]){
+            this.todayWeatherData=todayWeatherData;
+        },
+        clearTodayWeatherData(){
+            if(this.todayWeatherData){
+                this.todayWeatherData=[];
+            }
+           
+        }
     }
 })
 

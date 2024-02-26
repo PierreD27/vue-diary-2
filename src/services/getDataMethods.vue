@@ -64,6 +64,39 @@ export function getHoursData(daysData:any){
     }
 }
 
+export function getTodayWeatherData(daysData:any){
+  const todayWeatherData:any[]=[]
+  if (daysData.value){
+
+    for (let i=0; i<daysData.value.forecast.forecastday[0].hour.length; i++){
+      const time:string = daysData.value.forecast.forecastday[0].hour[i].time;
+      const short_time:string =time.slice(-5);
+      const hourCondition:string = daysData.value.forecast.forecastday[0].hour[i].condition.text;
+      const iconPath:string=getWeatherIconPath(hourCondition)
+      const temp_c:number=daysData.value.forecast.forecastday[0].hour[i].temp_c;
+      const temp_f:number=daysData.value.forecast.forecastday[0].hour[i].temp_f;
+      const is_day:number=daysData.value.forecast.forecastday[1].hour[i].is_day;
+      let fullIconPath:string;
+      if (is_day===1){
+        fullIconPath='/src/assets/images/icons/weather-icons/day' +iconPath;
+      }
+      else{
+        fullIconPath='/src/assets/images/icons/weather-icons/night' +iconPath;
+      }
+      const pushedObject:any={
+        hour:short_time,
+        condition:hourCondition,
+        icon_path: fullIconPath,
+        hourTemp_c:temp_c,
+        hourTemp_f: temp_f,
+        isDay: is_day,
+      }
+      todayWeatherData.push(pushedObject)
+    }
+    return todayWeatherData;
+  } 
+}
+
 
 function getWeekDay(date:Date) {
   let days:string[] = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];

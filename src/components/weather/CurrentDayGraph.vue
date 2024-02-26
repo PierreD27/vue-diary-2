@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 
 interface Props {
-    weatherByHour:any,
+    todayWeatherData:any,
     isCel:boolean,
 }
 
@@ -29,14 +29,14 @@ let mintemp_c:number=0;
 let mintemp_f:number=0;
 
 function getChartData(){
-    maxtemp_c=Math.round(props.weatherByHour[0].hourTemp_c);
-    mintemp_c=Math.round(props.weatherByHour[0].hourTemp_c);
-    maxtemp_f=Math.round(props.weatherByHour[0].hourTemp_f);
-    maxtemp_f=Math.round(props.weatherByHour[0].hourTemp_f);
-    for (let i=0; i<props.weatherByHour.length; i++){
-        labels[i]=props.weatherByHour[i].hour;
-        dataCel[i]=Math.round(props.weatherByHour[i].hourTemp_c);
-        dataFahr[i]=Math.round(props.weatherByHour[i].hourTemp_f);
+    maxtemp_c=Math.round(props.todayWeatherData[0].hourTemp_c);
+    mintemp_c=Math.round(props.todayWeatherData[0].hourTemp_c);
+    maxtemp_f=Math.round(props.todayWeatherData[0].hourTemp_f);
+    maxtemp_f=Math.round(props.todayWeatherData[0].hourTemp_f);
+    for (let i=0; i<props.todayWeatherData.length; i++){
+        labels[i]=props.todayWeatherData[i].hour;
+        dataCel[i]=Math.round(props.todayWeatherData[i].hourTemp_c);
+        dataFahr[i]=Math.round(props.todayWeatherData[i].hourTemp_f);
 
         if (maxtemp_c<dataCel[i]){
             maxtemp_c=dataCel[i];

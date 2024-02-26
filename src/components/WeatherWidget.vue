@@ -3,11 +3,14 @@ import DailyUpdate from './weather/DailyUpdate.vue';
 import {getDaysData} from '@/services/WeatherGetApi.vue'
 import {getHoursData} from '@/services/getDataMethods.vue'
 import {getWeekData} from '@/services/getDataMethods.vue';
+import {getTodayWeatherData} from '@/services/getDataMethods.vue';
 import {getCurrentDataIcon} from '@/services/getDataMethods.vue';
 import HourlyUpdate from './weather/HourlyUpdate.vue';
 import CurrentDayTemperature from './weather/CurrentDayTemperature.vue';
 import CurrentDayGraph from './weather/CurrentDayGraph.vue';
 import { ref, onMounted, watch } from 'vue';
+import { useTodayWeatherDataStore } from '@/stores/todoList'
+
 
 interface Props{
   isCel:boolean,
@@ -16,21 +19,26 @@ interface Props{
 
 
 const props = defineProps<Props>()
-
 const daysData = ref<any>(null)
 const loading=ref(false)
 const weatherByHour=ref<any>([])
+const todayWeatherData=ref<any>([])
 const weatherByWeek=ref<any>([])
 let currentDayIconPath:string=""
+
+const todayWeatherDataStore = useTodayWeatherDataStore();
+
 
 
 onMounted(async()=>{
 
   loading.value=true;
-  daysData.value=await getDaysData()
-  weatherByHour.value=getHoursData(daysData)
-  weatherByWeek.value=getWeekData(daysData)
-  currentDayIconPath=getCurrentDataIcon(daysData)
+  daysData.value=await getDaysData();
+  weatherByHour.value=getHoursData(daysData);
+  weatherByWeek.value=getWeekData(daysData);
+  todayWeatherData.value=getTodayWeatherData(daysData);
+  currentDayIconPath=getCurrentDataIcon(daysData);
+  todayWeatherDataStore.addTodayWeatherData(todayWeatherData.value);
   loading.value=false
 })
 
@@ -39,10 +47,14 @@ watch(()=> props.cityName, async ()=>{
   daysData.value=await getDaysData(props.cityName)
   weatherByHour.value=[];
   weatherByWeek.value=[];
+  todayWeatherData.value=[];
   currentDayIconPath='';
   weatherByHour.value=getHoursData(daysData)
   weatherByWeek.value=getWeekData(daysData)
+  todayWeatherData.value=getTodayWeatherData(daysData);
   currentDayIconPath=getCurrentDataIcon(daysData)
+  todayWeatherDataStore.clearTodayWeatherData()
+  todayWeatherDataStore.addTodayWeatherData(todayWeatherData.value)
   loading.value=false
 })
 
@@ -85,7 +97,7 @@ watch(()=> props.cityName, async ()=>{
         <div class="current-day-graph-wrapper">
 
          <CurrentDayGraph
-          :weatherByHour="weatherByHour"
+          :todayWeatherData="todayWeatherData"
           :isCel="isCel"
          />
 

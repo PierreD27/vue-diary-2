@@ -2,6 +2,7 @@
 import WeatherWidget from './components/WeatherWidget.vue';
 import NavigationBar from '@/components/NavigationBar.vue';
 import TaskList from './components/to-do-list/TaskList.vue';
+import FooterAndCredits from './components/FooterAndCredits.vue';
 
 import { ref } from 'vue';
 
@@ -18,6 +19,8 @@ const cityName=ref<string>('')
   />
   <WeatherWidget  :isCel="isCel" :city-name="cityName" />
 
-  <TaskList/>
+  <TaskList :isCel="isCel"/>
+
+  <FooterAndCredits/>
  </div>
 </template>
