@@ -33,7 +33,7 @@ defineProps<Props>()
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .daily-item {
   display: flex;
   justify-content:space-between;

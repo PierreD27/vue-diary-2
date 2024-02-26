@@ -23,10 +23,10 @@ import { Line } from 'vue-chartjs';
 const labels:string[]=[];
 const dataCel:number[]=[];
 const dataFahr:number[]=[];
-let maxtemp_c:number
-let maxtemp_f:number
-let mintemp_c:number
-let mintemp_f:number
+let maxtemp_c:number=0;
+let maxtemp_f:number=0;
+let mintemp_c:number=0;
+let mintemp_f:number=0;
 
 function getChartData(){
     maxtemp_c=Math.round(props.weatherByHour[0].hourTemp_c);
@@ -91,6 +91,11 @@ const chartDataFahr = {
 const optionsCel = {
   responsive: true,
   maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false
+    }
+  },
   scales: {
       y: {
         min: mintemp_c,
@@ -102,6 +107,11 @@ const optionsCel = {
 const optionsFahr = {
   responsive: true,
   maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false
+    }
+  },
   scales: {
       y: {
         min: mintemp_f,
@@ -124,7 +134,7 @@ const optionsFahr = {
     </div>  
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .canvas-container{
         display: flex;
         flex-direction: column;

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import DailyUpdate from './days/DailyUpdate.vue';
-import {getDaysData} from '@/services/WeatherGetApi.js'
-import {getWeatherIconPath} from '@/services/getIconPath.js'
-import HourlyUpdate from './days/HourlyUpdate.vue';
-import CurrentDayTemperature from './days/CurrentDayTemperature.vue';
-import CurrentDayGraph from './days/CurrentDayGraph.vue';
-import CurrentDayDiary from './days/CurrentDayDiary.vue';
+import DailyUpdate from './weather/DailyUpdate.vue';
+import {getDaysData} from '@/services/WeatherGetApi.vue'
+import {getHoursData} from '@/services/getDataMethods.vue'
+import {getWeekData} from '@/services/getDataMethods.vue';
+import {getCurrentDataIcon} from '@/services/getDataMethods.vue';
+import HourlyUpdate from './weather/HourlyUpdate.vue';
+import CurrentDayTemperature from './weather/CurrentDayTemperature.vue';
+import CurrentDayGraph from './weather/CurrentDayGraph.vue';
 import { ref, onMounted, watch } from 'vue';
 
 interface Props{
@@ -20,182 +21,42 @@ const daysData = ref<any>(null)
 const loading=ref(false)
 const weatherByHour=ref<any>([])
 const weatherByWeek=ref<any>([])
+let currentDayIconPath:string=""
 
 
 onMounted(async()=>{
 
   loading.value=true;
   daysData.value=await getDaysData()
-  getHoursData()
-  getWeekData()
-  getCurrentDataIcon()
+  weatherByHour.value=getHoursData(daysData)
+  weatherByWeek.value=getWeekData(daysData)
+  currentDayIconPath=getCurrentDataIcon(daysData)
   loading.value=false
 })
 
-//props.cityName
 watch(()=> props.cityName, async ()=>{
   loading.value=true
   daysData.value=await getDaysData(props.cityName)
   weatherByHour.value=[];
   weatherByWeek.value=[];
   currentDayIconPath='';
-  getHoursData()
-  getWeekData()
-  getCurrentDataIcon()
-  console.log(daysData)
-  console.log(weatherByHour)
-  console.log(weatherByWeek)
+  weatherByHour.value=getHoursData(daysData)
+  weatherByWeek.value=getWeekData(daysData)
+  currentDayIconPath=getCurrentDataIcon(daysData)
   loading.value=false
 })
 
 
-function getHoursData(){
-  if (daysData.value){
-    
-    const now =new Date();
-    const nowHour:number= now.getHours();
-    for (let i=nowHour+1; i<daysData.value.forecast.forecastday[0].hour.length; i++){
-      const time:string = daysData.value.forecast.forecastday[0].hour[i].time;
-      const short_time:string =time.slice(-5);
-      const hourCondition:string = daysData.value.forecast.forecastday[0].hour[i].condition.text;
-      const iconPath:string=getWeatherIconPath(hourCondition)
-      const temp_c:number=daysData.value.forecast.forecastday[0].hour[i].temp_c;
-      const temp_f:number=daysData.value.forecast.forecastday[0].hour[i].temp_f;
-      const is_day:number=daysData.value.forecast.forecastday[1].hour[i].is_day;
-      let fullIconPath:string;
-      if (is_day===1){
-        fullIconPath='/src/assets/images/icons/weather-icons/day' +iconPath;
-      }
-      else{
-        fullIconPath='/src/assets/images/icons/weather-icons/night' +iconPath;
-      }
-      const pushedObject:any={
-        hour:short_time,
-        condition:hourCondition,
-        icon_path: fullIconPath,
-        hourTemp_c:temp_c,
-        hourTemp_f: temp_f,
-        isDay: is_day,
-      }
-      weatherByHour.value.push(pushedObject)
-   }
-   const currentArrayLength:number=weatherByHour.value.length;
-   for (let i=0; i<daysData.value.forecast.forecastday[1].hour.length-currentArrayLength; i++){
-      const time:string = daysData.value.forecast.forecastday[1].hour[i].time;
-      const short_time:string =time.slice(-5);
-      const hourCondition:string = daysData.value.forecast.forecastday[1].hour[i].condition.text;
-      const iconPath:string=getWeatherIconPath(hourCondition)
-      const temp_c:number=daysData.value.forecast.forecastday[1].hour[i].temp_c;
-      const temp_f:number=daysData.value.forecast.forecastday[1].hour[i].temp_f;
-      const is_day:number=daysData.value.forecast.forecastday[1].hour[i].is_day;
-      let fullIconPath:string;
-      if (is_day===1){
-        fullIconPath='/src/assets/images/icons/weather-icons/day' +iconPath;
-      }
-      else{
-        fullIconPath='/src/assets/images/icons/weather-icons/night' +iconPath;
-      }
-      const pushedObject:any={
-        hour:short_time,
-        condition:hourCondition,
-        icon_path: fullIconPath,
-        hourTemp_c:temp_c,
-        hourTemp_f: temp_f,
-        isDay: is_day,
-      }
-      weatherByHour.value.push(pushedObject);
-   }
-  }
-}
 
 
-function getWeekData(){
-  function getWeekDay(date:Date) {
-        let days:string[] = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-
-        return days[date.getDay()];
-      }
-  if (daysData.value){
-    for (let i=1; i<daysData.value.forecast.forecastday.length; i++){
-      const singleDayDate:string=daysData.value.forecast.forecastday[i].date;
-      
-      const dateYear:number=+singleDayDate.slice(0,4);
-      const dateMonth:number=+singleDayDate.slice(-5,-3)-1;
-      const dateDate:number=+singleDayDate.slice(-2);
-      const tempDate:Date= new Date(dateYear, dateMonth, dateDate)
-
-      const weekDay:string=getWeekDay(tempDate);
-
-      //const singleDayDateNormalized:string=weekDay+" "+dateDate;
-      const singleDayCondition:string=daysData.value.forecast.forecastday[i].day.condition.text;
-      const iconPath:string=getWeatherIconPath(singleDayCondition)
-      const fullIconPath:string='/src/assets/images/icons/weather-icons/day' +iconPath;
-      const singleDayMaxTempC:number=daysData.value.forecast.forecastday[i].day.maxtemp_c;
-      const singleDayMaxTempF:number=daysData.value.forecast.forecastday[i].day.maxtemp_f;
-      const singleDayMinTempC:number=daysData.value.forecast.forecastday[i].day.mintemp_c;
-      const singleDayMinTempF:number=daysData.value.forecast.forecastday[i].day.mintemp_f;
-      const pushedObject:any={
-        date:dateDate,
-        weekDay:weekDay,
-        condition: singleDayCondition,
-        icon_path: fullIconPath,
-        maxtemp_c: singleDayMaxTempC,
-        maxtemp_f: singleDayMaxTempF,
-        mintemp_c: singleDayMinTempC,
-        mintemp_f: singleDayMinTempF,
-      }
-      weatherByWeek.value.push(pushedObject);
-    }
-  }
-}
-let currentDayIconPath:string
-function getCurrentDataIcon(){
-  if (daysData.value){
-    const currentDayCondition:string=daysData.value.current.condition.text; 
-    const isDay:number=daysData.value.current.is_day;
-    const iconPath:string=getWeatherIconPath(currentDayCondition);
-    if (isDay===1){
-      currentDayIconPath='/src/assets/images/icons/weather-icons/day' +iconPath;
-    }
-    else{
-      currentDayIconPath='/src/assets/images/icons/weather-icons/night' +iconPath;
-    }
-  }
-}
-
-const toDoList = ref([
-  {
-    time: '09:00',
-    activity: 'Breakfast'
-
-  },
-  {
-    time: '09:30',
-    activity: 'Jogging'
-
-  },
-  {
-    time: '10:30',
-    activity: 'Shower'
-
-  },
-  {
-    time: '11:30',
-    activity: 'Get to bus station'
-
-  },
-  {
-    time: '12:30',
-    activity: 'Business meeting with new clients'
-
-  },
-  
-])
 
 </script>
 
 <template>
-  <div v-if="loading">LOADING ....</div>
+  <div v-if="loading" class="loading-wrapper">
+    <div class="loader"></div>
+    <p>LOADING ....</p>
+  </div>
   <div v-if=" daysData && !loading " class="container weather-widget-wrapper">
     <div class="hero-section">
       <div class="current-day-wrapper">
@@ -251,13 +112,7 @@ const toDoList = ref([
           </template> 
         </div>
       </div>
-      <!-- <div class='current-day-diary-wrapper'>
-       <h3 class="title">Today's to do list</h3>
-        <template v-for="todo in toDoList" :key="todo.time">
-          <CurrentDayDiary :time="todo.time" :activity="todo.activity" />
-        </template>
-
-      </div> -->
+     
     </div>
     
     <div class="daily-wrapper">
@@ -277,9 +132,34 @@ const toDoList = ref([
     </div>
     
   </div>
+
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
+
+.loading-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50rem;
+  background-color: #494b68;
+
+  .loader {
+  border: 0.2rem solid #2d5f5d; /* Light grey */
+  border-top: 0.2rem solid #BCAB79; 
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 1rem;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+}
+
 .weather-widget-wrapper {
   margin: 0 auto;
   display: flex;
@@ -301,6 +181,7 @@ const toDoList = ref([
         
       }
       
+     
     }
 
    
@@ -334,7 +215,7 @@ const toDoList = ref([
 
       /* Handle on hover */
       ::-webkit-scrollbar-thumb:hover {
-        background: #494b68; 
+        background: #BCAB79; 
       }
 
       h2{

@@ -74,7 +74,7 @@ defineProps<Props>()
   flex-direction: column;
   margin-right: 2rem;
   border-radius: 0.5rem;
-  width: 100%;
+  min-width: 95%;
   
   h2{
     padding-top: 1rem;

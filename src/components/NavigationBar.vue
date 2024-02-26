@@ -63,7 +63,7 @@ function onCityChange(value:string){
  </div> 
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .navbar-wrapper {
   color: white;
   max-width: 1100px;

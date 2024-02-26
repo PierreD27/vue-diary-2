@@ -22,7 +22,7 @@ defineProps<Props>()
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .hour-wrapper {
   display: flex;
   flex-direction: column;
