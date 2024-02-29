@@ -99,7 +99,7 @@ export function getTodayWeatherData(daysData:any){
 
 
 function getWeekDay(date:Date) {
-  let days:string[] = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  const days:string[] = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
   return days[date.getDay()];
 }
