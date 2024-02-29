@@ -1,4 +1,4 @@
-<script lang="ts">
+
 
 export function getWeatherIconPath(condition:string){
     condition=condition.toLowerCase();
@@ -83,9 +83,3 @@ export function getWeatherIconPath(condition:string){
         return "";
     }    
   }
-
-</script>
-
-<template>
-  <p></p>
-</template>

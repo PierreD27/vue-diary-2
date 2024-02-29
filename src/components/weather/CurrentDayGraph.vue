@@ -137,10 +137,19 @@ const optionsFahr = {
 <style lang="scss" scoped>
     .canvas-container{
         display: flex;
+        flex: 1;
         flex-direction: column;
-        height: 100%;
         background-color: #022140;
         border-radius: 0.5rem;
+        max-width: 53%;
+
+        @media screen and (max-width: 720px) {
+          margin: 0 auto;
+          min-width: 96%;
+          padding-bottom: 0.5rem;
+        }
+
+       
 
         h2{
             padding-top: 1rem;
@@ -153,6 +162,7 @@ const optionsFahr = {
     .canvas-wrapper{
         padding: 0 1rem;
         height: 17.5rem;
+        
         
         
      

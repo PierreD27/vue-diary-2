@@ -1,17 +1,37 @@
 @import './colors.scss';
 html{
   background: rgb(2,0,36);
-  background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(38,80,119,1) 61%, rgba(0,212,255,1) 100%);
+  background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(38,80,119,1) 0%, rgba(0,212,255,1) 100%);
+
+  body, a, p, h1, h2, h3, h4, h5, div, span, ul, li {
+    margin: 0;
+    color: white;
+    font-family: "DM Sans", sans-serif;;
+    font-size: 18px;
+
+    #app{
+      @media screen and (max-width: 720px) {
+        width: 100vw;
+        padding: 0;
+        margin: 0;
+      }
+      
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0;
+    
+      @media screen and (max-width: 720px) {
+       
+      }
+      
+    }
+  
+  }
+
+
 }
 
-body, a, p, h1, h2, h3, h4, h5, div, span, ul, li {
-  margin: 0;
-  color: white;
-  font-family: "DM Sans", sans-serif;;
-  font-size: 18px;
-}
 
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-}
+

@@ -23,4 +23,5 @@ const cityName=ref<string>('')
 
   <FooterAndCredits/>
  </div>
-</template>
+</template> 
+

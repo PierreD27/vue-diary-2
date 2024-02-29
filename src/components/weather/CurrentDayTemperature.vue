@@ -72,9 +72,14 @@ defineProps<Props>()
   background-color:#022140;
   display: flex;
   flex-direction: column;
-  margin-right: 2rem;
+  min-width: 45%;
   border-radius: 0.5rem;
-  min-width: 95%;
+
+
+  @media screen and (max-width: 720px) {
+        width: 96%;
+        margin: 0 auto;
+      }
   
   h2{
     padding-top: 1rem;
@@ -89,6 +94,10 @@ defineProps<Props>()
     gap: 1rem;
     margin: 0 1rem;
     margin-top: 1rem;
+
+    @media screen and (max-width: 720px){
+      justify-content: center;
+    }
 
     .img-wrapper {
       width: 13.5rem;
@@ -130,6 +139,12 @@ defineProps<Props>()
     justify-content: center;
     align-items: center;
     margin: 0 1rem;
+    
+
+    @media screen and (max-width: 720px) {
+      flex-wrap: wrap;
+  
+    }
 
         
     .additional-info-item{
@@ -142,6 +157,11 @@ defineProps<Props>()
       padding: 0.2rem 0.2rem;
       margin: 1em auto;
       border-radius: 1rem;
+
+      @media screen and (max-width: 720px) {
+        width: 42%;
+        justify-content: center;
+    }
         
       span{
         font-size: 14px;

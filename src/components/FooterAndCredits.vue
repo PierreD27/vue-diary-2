@@ -24,9 +24,23 @@
         gap: 1rem;
         border-radius: 0.5rem 0.5rem 0  0;
 
+        @media screen and (max-width: 720px) {
+            flex-direction: column;
+            padding-left: 0;
+            border-radius: 0;
+            
+        }
+
         #rights{
             text-align: right;
             margin-right: 1rem;
+
+            @media screen and (max-width: 720px) {
+                text-align: center;
+                margin: 0;
+                
+
+            }
         }
 
         .credits{

@@ -74,12 +74,43 @@ function onCityChange(value:string){
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media screen and (max-width: 720px) {
+      display: flex;
+      flex-direction: column; 
+      margin-top: 0;
+      padding: 0;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      border-radius: 0;
+      
+      
+
+      }
+
+  
   
   .logo-wrapper{
     display: flex;
-    width: 70%;
-    
+    gap: 1rem;
     align-items: center;
+
+    @media screen and (max-width: 720px) {
+      display: flex;
+      justify-content: left;
+      @media screen and (max-width: 720px) {
+            width: 96%;
+            margin: 0 auto;
+            margin-bottom: 0.5rem;
+            justify-content: center;
+            
+        }
+     
+      margin-bottom: 1rem;
+     
+    
+
+      }
 
     img{
       height: 100%;
@@ -92,9 +123,15 @@ function onCityChange(value:string){
     font-size: 45px;
     font-weight: 500;
     color: white;
-    padding-left: 1rem;
-    }
+    @media screen and (max-width: 720px) {
+      
+      font-size: 27px;
+
+      }
     
+
+    }
+  
   }
 
   
@@ -102,13 +139,23 @@ function onCityChange(value:string){
     display: flex;
     float: right;
     padding-right: 1rem;
-  
+
+    @media screen and (max-width: 720px) {
+      display: flex;
+      width: 75%;
+      justify-content: center;
+      padding: 0;
+    }
     .change-location-wrapper{
       display: flex;
       padding-right: 1rem;
 
       input{
         border-radius: 0.5rem;
+
+        @media screen and (max-width: 720px) {
+          width: 12rem;
+        }
       }
 
     } 

@@ -42,7 +42,7 @@ const { toggleCompleted, deleteTodo, editTodo } = toDoStore;
                     <div class="display-info" v-if="!todo.editing"> 
                         <span>{{ todo.time }}</span>
                         <p id="task-text">{{ todo.item }} </p> 
-                        <span>Estimated weather:</span>
+                        <span id="estimated-span">Estimated weather:</span>
                         <img :src="todo.icon_path">
                         <p class="task-temperature" v-if="isCel">{{Math.round( todo.temp_c )}}°C</p>
                         <p class="task-temperature" v-else> {{ Math.round( todo.temp_f ) }}°F</p>
@@ -52,7 +52,7 @@ const { toggleCompleted, deleteTodo, editTodo } = toDoStore;
                         <input v-model="todo.item" type="text" >
                         <input v-model="todo.time" type="time" id="clock">
                     </div>
-
+                    <div class="edit-delete-buttons-wrapper"></div>
                     <div @click="editTodo(todo.id)" class="edit button">
                         <img  src="/src/assets/images/icons/edit.svg">
                     </div>                    
@@ -81,45 +81,81 @@ const { toggleCompleted, deleteTodo, editTodo } = toDoStore;
         border-radius: 0.5rem;
         min-height: 15rem;
 
+        @media screen and (max-width: 720px) {
+            width: 96%;
+            margin: 0 auto;
+            
+        }
+      
+    
+
         h2{
             padding-top: 1rem;
             padding-bottom: 0.5rem;
-            
             padding-left: 1rem;
             background-color: #1e4258;
             border-radius: 0.5rem 0.5rem  0 0 ;
         }
         .task-list-wrapper{
-            
             width: 100%;
 
+        
+           
+
+
             .task-items-wrapper{
-                padding-left: 1rem;
-                padding-right: 1rem;
+                display: flex;
+                flex-direction: column;
+                padding: 0.5rem 1rem;
+                gap: 0.75rem;
+                margin: 0, auto;
             
-                
+                @media screen and (max-width: 720px) {
+                    padding-left: 0.5rem;
+                    padding-right: 0.5rem;;
+                }
 
                 .todo-item{
                     background-color:#1e4258;
-                    margin-bottom: 0.75rem;
-                    padding-left: 1rem;
-                    gap: 1rem;
+                   
                     height: 3rem;
                     border-radius: 0.5rem;
                     display: flex;
                     align-items: center;
+                    justify-content: space-around;
+
+                    @media screen and (max-width: 720px) {
+                        width: 95%;
+                        gap: 0.5rem;     
+                        margin: 0 auto; 
+                        padding-left: 0.5rem;
+
+                    }
+
                     
                     
                     .display-info{
                         display: flex;
                         align-items: center;
                         gap: 1rem;
+                        width: 85%;
 
                         #task-text{
-                            width: 20rem;
+                            width: 55%;
+                        }
+
+                        #estimated-span{
+                            @media screen and (max-width: 720px) {
+                                display: none;
+                            }
                         }
                         .weather-condition{
-                            width: 15rem;
+                            width: 40%;
+
+                            @media screen and (max-width: 720px) {
+                                display: none;
+                                width: 1%;
+                            }
                         }
                         .task-temperature{
                             width: 2rem;
@@ -142,20 +178,26 @@ const { toggleCompleted, deleteTodo, editTodo } = toDoStore;
                         }
                     }
 
-                    .checkmark{
-                        background-color:#2d5f5d;
-                    }
+                    
                     
 
                     .edit{
-                        background-color:#CDC392;
+                        background-color:#b8b08c;
+
+                        @media screen and (max-width: 720px) {
+                            display: none;
+                        }
                     }
                     .delete{
+                        
                         background-color:#DB2B39;
+                        @media screen and (max-width: 720px) {
+                            background: none;
+                        }
                     }
 
                     .completed {
-                        background-color:#BCAB79; 
+                        background-color:#2d5f5d; 
                     }
 
 
@@ -163,7 +205,8 @@ const { toggleCompleted, deleteTodo, editTodo } = toDoStore;
                         display: flex;
                         align-items: center;
                         gap: 0.5rem;
-                        width: 55.95rem;
+                        width: 85%; 
+
                         input{
                             height: 1.3rem;
                             border-radius: 0.5rem;
@@ -173,6 +216,7 @@ const { toggleCompleted, deleteTodo, editTodo } = toDoStore;
 
                         
                         }
+
                         #clock{
                             font-weight: 800;
                             height: 1.5rem;

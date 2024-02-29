@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import DailyUpdate from './weather/DailyUpdate.vue';
-import {getDaysData} from '@/services/WeatherGetApi.vue'
-import {getHoursData} from '@/services/getDataMethods.vue'
-import {getWeekData} from '@/services/getDataMethods.vue';
-import {getTodayWeatherData} from '@/services/getDataMethods.vue';
-import {getCurrentDataIcon} from '@/services/getDataMethods.vue';
+import {getDaysData} from '@/services/WeatherGetApi'
+import {getHoursData} from '@/services/getDataMethods'
+import {getWeekData} from '@/services/getDataMethods';
+import {getTodayWeatherData} from '@/services/getDataMethods';
+import {getCurrentDataIcon} from '@/services/getDataMethods';
 import HourlyUpdate from './weather/HourlyUpdate.vue';
 import CurrentDayTemperature from './weather/CurrentDayTemperature.vue';
 import CurrentDayGraph from './weather/CurrentDayGraph.vue';
@@ -69,11 +69,10 @@ watch(()=> props.cityName, async ()=>{
     <div class="loader"></div>
     <p>LOADING ....</p>
   </div>
-  <div v-if=" daysData && !loading " class="container weather-widget-wrapper">
+  <div v-if=" daysData && !loading " class="weather-widget-wrapper">
     <div class="hero-section">
       <div class="current-day-wrapper">
 
-        <div class="current-day-temperature-wrapper">
    
           <CurrentDayTemperature :temp_c="daysData.current.temp_c" 
             :temp_f="daysData.current.temp_f" 
@@ -92,16 +91,13 @@ watch(()=> props.cityName, async ()=>{
             :isCel="isCel"
           />
 
-        </div>  
 
-        <div class="current-day-graph-wrapper">
 
          <CurrentDayGraph
           :todayWeatherData="todayWeatherData"
           :isCel="isCel"
          />
 
-        </div>
 
         
 
@@ -176,35 +172,62 @@ watch(()=> props.cityName, async ()=>{
   margin: 0 auto;
   display: flex;
   gap: 1rem;
-  padding: 1.5rem 1rem;
-  background-color: #494b68;
+ 
   border-radius: 0.5rem;
 
+  @media screen and (max-width: 720px) {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0;
+        padding-bottom: 0.5rem;
+        flex-direction: column;
+      }
+      
+
+
+
   .hero-section {
-    flex: 1;
+
     max-width: 82%;
+
+    @media screen and (max-width: 720px) {
+        max-width: 100vw;
+        margin: 0 auto;
+      }
+
     .current-day-wrapper{
       display: flex;
       margin-bottom: 1rem;
-      justify-content: space-between;
+      gap: 1rem;
+    
+     
       
       @media screen and (max-width: 720px) {
         flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+        justify-content: center;
+       
+      
+        
         
       }
       
+      
      
     }
-
-   
-    .current-day-graph-wrapper{
-      width: 51%;
-      max-height: 100%;
-    }
+    
+    
     .hourly-wrapper {
       background-color: #022140;
       border-radius: 0.5rem;
       padding-bottom: 1rem;
+
+      @media screen and (max-width: 720px) {
+        width: 96%;
+        margin: 0 auto;
+        
+      }
 
       /* width */
       ::-webkit-scrollbar {
@@ -253,15 +276,7 @@ watch(()=> props.cityName, async ()=>{
     }
   }
 
-  .current-day-diary-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    overflow-y: auto;
-    max-width: 40%;
-
-    // flex: 1;
-  }
+  
   .daily-wrapper {
     display: flex;
     flex-direction: column;
@@ -271,13 +286,15 @@ watch(()=> props.cityName, async ()=>{
     padding-bottom: 0.5rem;
     width: 17%;
     @media screen and (max-width: 720px) {
-      width: 100%;
+      width: 96%;
+      margin: 0 auto;
+      
     }
 
     h2{
     padding-top: 1rem;
     padding-bottom: 0.5rem;
-    margin-bottom: 0.2rem;
+    
     padding-left: 1rem;
     background-color: #1e4258;
     border-radius: 0.5rem 0.5rem  0 0 ;
@@ -285,12 +302,6 @@ watch(()=> props.cityName, async ()=>{
     // flex: 1;
   }
 
-  @media screen and (max-width: 720px) {
-    flex-direction: column;
-
-    // .hourly-wrapper {
-    //   display: none;
-    // }
-  }
+  
 }
 </style>

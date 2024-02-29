@@ -1,6 +1,6 @@
-<script lang="ts">
 
-import { getWeatherIconPath } from "@/services/getIconPath.vue";
+
+import { getWeatherIconPath } from "@/services/getIconPath";
 
 export function getHoursData(daysData:any){
     const weatherByHour:any[]=[];
@@ -163,8 +163,3 @@ export function getCurrentDataIcon(daysData:any){
 }
 
 
-</script> 
-
-<template>
-  <p></p>
-</template>

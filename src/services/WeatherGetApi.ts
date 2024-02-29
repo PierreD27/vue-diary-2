@@ -1,4 +1,3 @@
-<script lang="ts">
 
 import axios from "axios";
 
@@ -12,8 +11,7 @@ const apiClient = axios.create({
 })
 
 
-
-export async function getDaysData(cityName = 'Bishkek'){ 
+  export async function getDaysData(cityName = 'Bishkek'){ 
     try {
         const response = await apiClient.get('/forecast.json?key=2cacdf679ade4b979d471305241302&q=' + cityName + '&days=8')
         return response.data
@@ -24,6 +22,4 @@ export async function getDaysData(cityName = 'Bishkek'){
         return response.data
     }
     
-}
-
-</script>
+    }

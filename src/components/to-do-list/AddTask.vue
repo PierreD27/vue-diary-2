@@ -35,7 +35,7 @@ function addTaskAndClear(item:string, time:string){
 <template>
     <div class="add-task-wrapper">
         <form @submit.prevent="addTaskAndClear(todo, clock)"> 
-            <span>Add New Task:</span>
+            <span id="add-task-span">Add New Task:</span>
             <input v-model="todo" type="text"/>
             <input id="clock" v-model="clock" type="time">
             <button>Add</button>
@@ -46,12 +46,28 @@ function addTaskAndClear(item:string, time:string){
 <style lang="scss" scoped>
     .add-task-wrapper{
         padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
+
         padding-left: 1rem;
         align-items: center;
+
+        @media screen and (max-width: 720px) {
+            padding-left: 0;
+
+        }
         form{
             display: flex;
             align-items: center;
+
+            @media screen and (max-width: 720px){
+                margin: 0, auto;
+                justify-content: center;
+            }
+
+            #add-task-span{
+                @media screen and (max-width: 720px) {
+                    display: none;
+                }
+            }
             
             span{
                 padding-right: 0.5rem;
@@ -68,7 +84,8 @@ function addTaskAndClear(item:string, time:string){
             }
             #clock{
                     font-weight: 800;
-                    height: 1.5rem;
+                    height: 1.55rem;
+                    border: 0;
                     
                     
                 }
@@ -77,9 +94,10 @@ function addTaskAndClear(item:string, time:string){
                 color: white;
                 font-weight: 600;
                 font-family: "DM Sans", sans-serif;;
-                height: 1.7rem;
+                height: 1.6rem;
                 border-radius: 0.5rem;
                 background-color: #BCAB79 ;
+                border: 0;
             }
         }
     }
