@@ -1,24 +1,28 @@
 <script lang="ts" setup>
+import { ref, onMounted } from 'vue'
 interface Props {
-  hour:string,
-  condition:string,
-  icon_path: string,
-  temp_c:number,
-  temp_f:number,
-  is_day:number,
-  isCel:boolean,
+  hour: string
+  condition: string
+  icon_path: string
+  temp_c: number
+  temp_f: number
+  is_day: number
+  isCel: boolean
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+const imageUrl = ref('')
+onMounted(() => {
+  imageUrl.value = new URL(`/src/assets/${props.icon_path}`, import.meta.url).href
+})
 </script>
 
 <template>
   <div class="hour-wrapper">
-    <p> {{ hour }}</p>
-    <img :src="icon_path">
-    <p v-if="isCel"> {{Math.round(temp_c) }}°C</p>
-    <p v-else> {{Math.round(temp_f) }}°F</p>
-    
+    <p>{{ hour }}</p>
+    <img v-if="imageUrl" :src="imageUrl" />
+    <p v-if="isCel">{{ Math.round(temp_c) }}°C</p>
+    <p v-else>{{ Math.round(temp_f) }}°F</p>
   </div>
 </template>
 
@@ -33,14 +37,13 @@ defineProps<Props>()
   margin-bottom: 0.2rem;
   border-radius: 0.5rem;
 
-  img{
+  img {
     width: 90%;
     margin-top: 0.3rem;
     margin-bottom: 0.3rem;
   }
-  p{
+  p {
     text-align: center;
   }
-
 }
 </style>
