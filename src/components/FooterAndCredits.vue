@@ -12,7 +12,7 @@
       </p>
     </div>
 
-    <p id="rights">SNS Weather Channel<sup>©</sup> 2024 All rights resereved</p>
+    <p id="rights">SNS Weather Assistant<sup>©</sup> 2024 All rights resereved</p>
   </div>
 </template>
 

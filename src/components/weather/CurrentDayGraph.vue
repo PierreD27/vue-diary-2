@@ -144,6 +144,16 @@ const optionsFahr = {
   .canvas-wrapper {
     padding: 0 1rem;
     height: 17.5rem;
+
+    @media screen and (max-width: 1060px) and (min-width: 931px) {
+      height: 23rem;
+    }
+    @media screen and (max-width: 930px) and (min-width: 831px) {
+      height: 25rem;
+    }
+    @media screen and (max-width: 830px) and (min-width: 721px) {
+      height: 20rem;
+    }
   }
 }
 </style>

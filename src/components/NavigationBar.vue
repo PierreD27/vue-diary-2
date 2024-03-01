@@ -26,7 +26,7 @@ function onCityChange(value: string) {
   <div class="navbar-wrapper">
     <div class="logo-wrapper">
       <img src="\src\assets\images\icons\logo.svg" />
-      <h1>SNS Weather Channel<sup>©</sup></h1>
+      <h1>SNS Weather Assistant<sup>©</sup></h1>
     </div>
     <div class="nav-buttons">
       <div class="change-location-wrapper">
@@ -61,7 +61,7 @@ function onCityChange(value: string) {
   margin: 1rem auto;
   padding: 1rem 1rem;
   border-radius: 0.5rem;
-  background-color: #494b68;
+  background-color: #022140;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -104,6 +104,9 @@ function onCityChange(value: string) {
       font-size: 45px;
       font-weight: 500;
       color: white;
+      @media screen and (max-width: 870px) and (min-width: 721px) {
+        font-size: 30px;
+      }
       @media screen and (max-width: 720px) {
         font-size: 27px;
       }
@@ -152,7 +155,7 @@ function onCityChange(value: string) {
         display: none;
         &:checked {
           + .box {
-            background-color: #1e4258;
+            background-color: #494b68;
             span {
               color: white;
               &:before {

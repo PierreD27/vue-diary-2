@@ -168,6 +168,7 @@ const { toggleCompleted, deleteTodo, editTodo } = toDoStore
         .delete {
           background-color: #db2b39;
           @media screen and (max-width: 720px) {
+            margin-right: 0.5rem;
             background: none;
           }
         }

@@ -12,13 +12,13 @@ const apiClient = axios.create({
 export async function getDaysData(cityName = 'Bishkek') {
   try {
     const response = await apiClient.get(
-      '/forecast.json?key=2cacdf679ade4b979d471305241302&q=' + cityName + '&days=8'
+      '/forecast.json?key=6889ae3cbf4149768bc51301240103&q=' + cityName + '&days=8'
     )
     return response.data
   } catch (error) {
     //alert('City is not found')
     const response = await apiClient.get(
-      '/forecast.json?key=2cacdf679ade4b979d471305241302&q=bishkek&days=8'
+      '/forecast.json?key=6889ae3cbf4149768bc51301240103&q=bishkek&days=8'
     )
     return response.data
   }

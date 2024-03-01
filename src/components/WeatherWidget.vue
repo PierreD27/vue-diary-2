@@ -170,6 +170,13 @@ watch(
   .hero-section {
     max-width: 82%;
 
+    @media screen and (max-width: 1060px) and (min-width: 830px) {
+      max-width: 80%;
+    }
+
+    @media screen and (max-width: 830px) and (min-width: 721px) {
+      max-width: 75%;
+    }
     @media screen and (max-width: 720px) {
       max-width: 100vw;
       margin: 0 auto;
@@ -250,6 +257,15 @@ watch(
     border-radius: 0.5rem;
     padding-bottom: 0.5rem;
     width: 17%;
+
+    @media screen and (max-width: 1060px) and (min-width: 830px) {
+      width: 19%;
+    }
+
+    @media screen and (max-width: 830px) and (min-width: 721px) {
+      flex: 1;
+    }
+
     @media screen and (max-width: 720px) {
       width: 96%;
       margin: 0 auto;

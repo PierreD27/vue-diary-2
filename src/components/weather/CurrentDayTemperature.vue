@@ -38,10 +38,11 @@ onMounted(() => {
         <h3 v-if="isCel">{{ Math.round(temp_c) }}°C</h3>
         <h3 v-else>{{ Math.round(temp_f) }}°F</h3>
         <p>{{ condition }}</p>
+        <div class="sunset-sunrise-info">
+          <p><img src="@/assets/images/icons/sunrise.svg" alt="" />{{ sunrise }}</p>
 
-        <p><img src="@/assets/images/icons/sunrise.svg" alt="" />{{ sunrise }}</p>
-
-        <p><img src="@/assets/images/icons/sunset.svg" alt="" />{{ sunset }}</p>
+          <p><img src="@/assets/images/icons/sunset.svg" alt="" />{{ sunset }}</p>
+        </div>
       </div>
     </div>
     <div class="current-day-temperature-additional-info">
@@ -107,7 +108,11 @@ onMounted(() => {
     }
     .current-day-temperature-info {
       width: 50%;
-
+      .sunset-sunrise-info {
+        @media screen and (max-width: 931px) and (min-width: 721px) {
+          display: none;
+        }
+      }
       h3 {
         text-align: center;
         font-size: 50px;
@@ -136,7 +141,7 @@ onMounted(() => {
     align-items: center;
     margin: 0 1rem;
 
-    @media screen and (max-width: 720px) {
+    @media screen and (max-width: 1060px) {
       flex-wrap: wrap;
     }
 
@@ -151,7 +156,7 @@ onMounted(() => {
       margin: 1em auto;
       border-radius: 1rem;
 
-      @media screen and (max-width: 720px) {
+      @media screen and (max-width: 1060px) {
         width: 42%;
         justify-content: center;
       }

@@ -28,6 +28,23 @@ type todayWeatherDataState = {
   todayWeatherData: todayWeatherDataItem[]
 }
 
+export const useTodayWeatherDataStore = defineStore('todayWeatherData', {
+  state: (): todayWeatherDataState => ({
+    todayWeatherData: []
+  }),
+
+  actions: {
+    addTodayWeatherData(todayWeatherData: any[]) {
+      this.todayWeatherData = todayWeatherData
+    },
+    clearTodayWeatherData() {
+      if (this.todayWeatherData) {
+        this.todayWeatherData = []
+      }
+    }
+  }
+})
+
 export const useTodoListStore = defineStore('todoList', {
   state: (): todoState => ({
     todoList: [],
@@ -54,12 +71,46 @@ export const useTodoListStore = defineStore('todoList', {
         completed: false,
         editing: false
       })
+      this.todoList.sort(function (a, b) {
+        if (a.time > b.time) {
+          return 1
+        }
+        if (a.time < b.time) {
+          return -1
+        }
+        return 0
+      })
     },
 
     editTodo(idToFind: number) {
       const todo = this.todoList.find((obj) => obj.id === idToFind)
       if (todo) {
         todo.editing = !todo.editing
+        console.log(todo)
+        const timeIndex: number = +todo.time.slice(0, 2)
+        const todayWeatherDataStore = useTodayWeatherDataStore()
+        let previousTime: string = '00:00'
+        if (todo.editing) {
+          previousTime = todo.time
+        } else {
+          if (previousTime !== todo.time) {
+            if (todayWeatherDataStore) {
+              todo.condition = todayWeatherDataStore.todayWeatherData[timeIndex].condition
+              todo.icon_path = todayWeatherDataStore.todayWeatherData[timeIndex].icon_path
+              todo.temp_c = todayWeatherDataStore.todayWeatherData[timeIndex].hourTemp_c
+              todo.temp_f = todayWeatherDataStore.todayWeatherData[timeIndex].hourTemp_f
+            }
+            this.todoList.sort(function (a, b) {
+              if (a.time > b.time) {
+                return 1
+              }
+              if (a.time < b.time) {
+                return -1
+              }
+              return 0
+            })
+          }
+        }
       }
     },
     deleteTodo(itemId: number) {
@@ -72,23 +123,6 @@ export const useTodoListStore = defineStore('todoList', {
       const todo = this.todoList.find((obj) => obj.id === idToFind)
       if (todo) {
         todo.completed = !todo.completed
-      }
-    }
-  }
-})
-
-export const useTodayWeatherDataStore = defineStore('todayWeatherData', {
-  state: (): todayWeatherDataState => ({
-    todayWeatherData: []
-  }),
-
-  actions: {
-    addTodayWeatherData(todayWeatherData: any[]) {
-      this.todayWeatherData = todayWeatherData
-    },
-    clearTodayWeatherData() {
-      if (this.todayWeatherData) {
-        this.todayWeatherData = []
       }
     }
   }

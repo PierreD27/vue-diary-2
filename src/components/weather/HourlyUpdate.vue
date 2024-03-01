@@ -41,6 +41,11 @@ onMounted(() => {
     width: 90%;
     margin-top: 0.3rem;
     margin-bottom: 0.3rem;
+
+    @media screen and (max-width: 720px) {
+      margin-top: 0.1rem;
+      margin-bottom: 0.1rem;
+    }
   }
   p {
     text-align: center;

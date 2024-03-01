@@ -1,11 +1,12 @@
 @import './colors.scss';
 html {
-  background: rgb(38, 80, 119);
+  background: rgb(2, 0, 36);
   background: linear-gradient(
     90deg,
+    rgba(2, 0, 36, 0.865983893557423) 0%,
     rgba(38, 80, 119, 1) 35%,
-    rgba(73, 75, 104, 1) 50%,
-    rgba(38, 80, 119, 1) 65%
+    rgba(73, 75, 104, 1) 65%,
+    rgba(2, 0, 36, 1) 100%
   );
   body,
   a,
